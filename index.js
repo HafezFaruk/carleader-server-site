@@ -18,28 +18,40 @@ async function run() {
         await client.connect();
         console.log('conneckt todad');
         const database = client.db('carLeader');
-        const foodCollection = database.collection('services');
+        const carCollection = database.collection('services');
         const ordersCollection = database.collection("orders");
         const reviewCollection = database.collection("review");
+        const contactCollection = database.collection("contact");
             
         //post api for services insert
         app.post('/review', async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
-            console.log(result);
+            res.json(result)
+        });
+        //post api for contact from
+        app.post('/contact', async (req, res) => {
+            const contact = req.body;
+            const result = await contactCollection.insertOne(contact);
             res.json(result)
         });
 
 
         //GET API for show data home
         app.get('/services', async (req, res) => {
-            const cursor = foodCollection.find({}).limit(6);
+            const cursor = carCollection.find({}).limit(6);
             const services = await cursor.toArray();
             res.send(services);
         });
         //GET API for show data explore
         app.get('/explore', async (req, res) => {
-            const cursor = foodCollection.find({});
+            const cursor = carCollection.find({});
+            const services = await cursor.toArray();
+            res.send(services);
+        });
+        //GET API for show data review
+        app.get('/review', async (req, res) => {
+            const cursor = reviewCollection.find({});
             const services = await cursor.toArray();
             res.send(services);
         });
@@ -49,7 +61,7 @@ async function run() {
             const id = req.params.id;
             console.log('getting specific service', id);
             const query = { _id: ObjectId(id) };
-            const service = await foodCollection.findOne(query);
+            const service = await carCollection.findOne(query);
             res.json(service);
         })
 

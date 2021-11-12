@@ -88,7 +88,6 @@ async function run() {
       res.send(result);
     });
 
-    
     //GET API for show data carOrders
     app.get("/carOrders", async (req, res) => {
       const cursor = ordersCollection.find({});
@@ -104,6 +103,26 @@ async function run() {
       res.json(result);
     });
 
+    //admin
+    app.put('users/admin', async (req,res) =>{
+      const user = req.body;
+      console.log('put admin', user);
+      const filter = {email: user.email};
+      const updateDoc = {$set: {role: 'admin'}};
+      const result = await usersCollection.updateOne(filter, updateDoc);
+      res.json(result);
+    })
+    // admin test
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      let isAdmin = false;
+      if (user?.role === "admin") {
+        isAdmin = true;
+      }
+      res.json({ admin: isAdmin });
+    });
 
     //update status
     app.put("/update/:id", async (req, res) => {

@@ -114,6 +114,13 @@ async function run() {
       const result = await ordersCollection.deleteOne(query);
       res.json(result);
     });
+    // cancel an product
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await carCollection.deleteOne(query);
+      res.json(result);
+    });
 
     //admin
     app.put('users/admin', async (req,res) =>{

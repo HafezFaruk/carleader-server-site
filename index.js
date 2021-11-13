@@ -33,6 +33,12 @@ async function run() {
       const result = await reviewCollection.insertOne(review);
       res.json(result);
     });
+    //post api for services add a car product
+    app.post("/services", async (req, res) => {
+      const services = req.body;
+      const result = await carCollection.insertOne(services);
+      res.json(result);
+    });
     //post api for contact from
     app.post("/contact", async (req, res) => {
       const contact = req.body;
@@ -61,6 +67,12 @@ async function run() {
     //GET API for show data review
     app.get("/review", async (req, res) => {
       const cursor = reviewCollection.find({});
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+    //GET API for show data manageProduct
+    app.get("/manageProduct", async (req, res) => {
+      const cursor = carCollection.find({});
       const services = await cursor.toArray();
       res.send(services);
     });
